@@ -20,9 +20,73 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List _tarefasList = [];
 
+  final _tarefaController = TextEditingController();
+
+  void _addTarefa() {
+    setState(() {
+      Map<String, dynamic> newTarefa = Map();
+      newTarefa["title"] = _tarefaController.text;
+      _tarefaController.text = "";
+      newTarefa["ok"] = false;
+      _tarefasList.add(newTarefa);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Lista de Tarefas"),
+        backgroundColor: Colors.blueAccent,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.fromLTRB(17, 1, 7, 1),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    controller: _tarefaController,
+                    decoration: InputDecoration(
+                        labelText: "Nova Tarefa",
+                        labelStyle: TextStyle(color: Colors.blueAccent)),
+                  ),
+                ),
+                RaisedButton(
+                  color: Colors.blueAccent,
+                  child: Text("Add"),
+                  textColor: Colors.white,
+                  onPressed: _addTarefa,
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 10),
+              itemCount: _tarefasList.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(_tarefasList[index]["title"]),
+                  value: _tarefasList[index]["ok"],
+                  secondary: CircleAvatar(
+                    child: Icon(
+                        _tarefasList[index]["ok"] ? Icons.check : Icons.error),
+                  ),
+                  onChanged: (checked){
+                    setState(() {
+                      _tarefasList[index]["ok"] = checked;
+                    });
+                  },
+                );
+              }, // itemBuilder
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   // Pegar diretorio do arquivo
