@@ -79,25 +79,37 @@ class _HomeState extends State<Home> {
             child: ListView.builder(
               padding: EdgeInsets.only(top: 10),
               itemCount: _tarefasList.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text(_tarefasList[index]["title"]),
-                  value: _tarefasList[index]["ok"],
-                  secondary: CircleAvatar(
-                    child: Icon(
-                        _tarefasList[index]["ok"] ? Icons.check : Icons.error),
-                  ),
-                  onChanged: (checked) {
-                    setState(() {
-                      _tarefasList[index]["ok"] = checked;
-                      _saveData();
-                    });
-                  },
-                );
-              }, // itemBuilder
+              itemBuilder: buildItem, // itemBuilder
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildItem(context, index) {
+    return Dismissible(
+      // permite arrastar um item para a direita, para deleta-lo
+      key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
+      background: Container(
+          color: Colors.red,
+          child: Align(
+            alignment: Alignment(-0.9, 0),
+            child: Icon(Icons.delete, color: Colors.white),
+          )),
+      direction: DismissDirection.startToEnd,
+      child: CheckboxListTile(
+        title: Text(_tarefasList[index]["title"]),
+        value: _tarefasList[index]["ok"],
+        secondary: CircleAvatar(
+          child: Icon(_tarefasList[index]["ok"] ? Icons.check : Icons.error),
+        ),
+        onChanged: (checked) {
+          setState(() {
+            _tarefasList[index]["ok"] = checked;
+            _saveData();
+          });
+        },
       ),
     );
   }
