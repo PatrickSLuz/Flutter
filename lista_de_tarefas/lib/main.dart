@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -46,6 +47,22 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<Null> _refresh() async {
+    // esperar 1 segundo
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      _tarefasList.sort((a, b) {
+        if (a["ok"] && !b["ok"])
+          return 1;
+        else if (!a["ok"] && b["ok"])
+          return -1;
+        else
+          return 0;
+        _saveData();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,12 +95,14 @@ class _HomeState extends State<Home> {
             ),
           ),
           Expanded(
+              child: RefreshIndicator(
+            onRefresh: _refresh,
             child: ListView.builder(
               padding: EdgeInsets.only(top: 10),
               itemCount: _tarefasList.length,
               itemBuilder: buildItem, // itemBuilder
             ),
-          )
+          ))
         ],
       ),
     );
@@ -136,6 +155,8 @@ class _HomeState extends State<Home> {
             duration: Duration(seconds: 2),
           );
 
+          // remove a snackbar atual (caso ainda esteja aparecendo)
+          Scaffold.of(context).removeCurrentSnackBar();
           // faz aparecer o snackbar
           Scaffold.of(context).showSnackBar(snack);
         });
