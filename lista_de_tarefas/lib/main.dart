@@ -22,6 +22,17 @@ class _HomeState extends State<Home> {
 
   final _tarefaController = TextEditingController();
 
+  @override
+  // funcao que eh chamado sempre que a tela do app eh aberta
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        _tarefasList = json.decode(data);
+      });
+    });
+  }
+
   void _addTarefa() {
     setState(() {
       Map<String, dynamic> newTarefa = Map();
@@ -29,6 +40,7 @@ class _HomeState extends State<Home> {
       _tarefaController.text = "";
       newTarefa["ok"] = false;
       _tarefasList.add(newTarefa);
+      _saveData();
     });
   }
 
@@ -75,9 +87,10 @@ class _HomeState extends State<Home> {
                     child: Icon(
                         _tarefasList[index]["ok"] ? Icons.check : Icons.error),
                   ),
-                  onChanged: (checked){
+                  onChanged: (checked) {
                     setState(() {
                       _tarefasList[index]["ok"] = checked;
+                      _saveData();
                     });
                   },
                 );
