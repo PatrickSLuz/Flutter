@@ -34,7 +34,43 @@ class _HomeState extends State<Home> {
 
   double dolar;
   double euro;
-  
+
+  void _clearAll() {
+    realController.text = "";
+    dolarController.text = "";
+    euroController.text = "";
+  }
+
+  void _realChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double real = double.parse(text);
+    dolarController.text = (real / dolar).toStringAsFixed(2);
+    euroController.text = (real / euro).toStringAsFixed(2);
+  }
+
+  void _dolarChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double dolar = double.parse(text);
+    realController.text = (dolar * this.dolar).toStringAsFixed(2);
+    euroController.text = (dolar * this.dolar / euro).toStringAsFixed(2);
+  }
+
+  void _euroChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dolarController.text = (euro * this.euro / dolar).toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,11 +123,14 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Icon(Icons.monetization_on,
                           size: 150, color: Colors.amber),
-                      buildTextField("Reais", "R\$ ", realController),
+                      buildTextField(
+                          "Reais", "R\$ ", realController, _realChanged),
                       Divider(), // Espacamento
-                      buildTextField("Dolares", "\$ ", dolarController),
+                      buildTextField(
+                          "Dolares", "\$ ", dolarController, _dolarChanged),
                       Divider(), // Espacamento
-                      buildTextField("Euros", "\€ ", euroController)
+                      buildTextField(
+                          "Euros", "\€ ", euroController, _euroChanged)
                     ],
                   ),
                 );
@@ -103,8 +142,8 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget buildTextField(
-    String label, String prefix, TextEditingController txtController) {
+Widget buildTextField(String label, String prefix,
+    TextEditingController txtController, Function changed) {
   return TextField(
     controller: txtController,
     decoration: InputDecoration(
@@ -113,5 +152,8 @@ Widget buildTextField(
         border: OutlineInputBorder(),
         prefixText: prefix),
     style: TextStyle(color: Colors.amber, fontSize: 25),
+    onChanged: changed,
+    keyboardType:
+        TextInputType.numberWithOptions(decimal: true), // tipo do campo // numberWithOptions(decimal: true) para funcionar no iOS
   );
 }
