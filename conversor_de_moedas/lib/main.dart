@@ -17,15 +17,24 @@ void main() async {
   ));
 }
 
+Future<Map> getResponse() async {
+  http.Response response = await http.get(request_url);
+  return json.decode(response.body);
+}
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  final realController = TextEditingController();
+  final dolarController = TextEditingController();
+  final euroController = TextEditingController();
+
   double dolar;
   double euro;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +47,7 @@ class _HomeState extends State<Home> {
       body: FutureBuilder<Map>(
         future: getResponse(),
         builder: (context, snapshot) {
-          // o que vai exibit em cada caso
+          // o que vai exibir em cada caso
           switch (snapshot.connectionState) {
             // estado da conexao
             case ConnectionState.none: // nao conectado
@@ -78,36 +87,15 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Icon(Icons.monetization_on,
                           size: 150, color: Colors.amber),
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: "Reais",
-                            labelStyle: TextStyle(color: Colors.amber),
-                            border: OutlineInputBorder(),
-                            prefixText: "R\$ "),
-                        style: TextStyle(color: Colors.amber, fontSize: 25),
-                      ),
+                      buildTextField("Reais", "R\$ ", realController),
                       Divider(), // Espacamento
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: "Dolares",
-                            labelStyle: TextStyle(color: Colors.amber),
-                            border: OutlineInputBorder(),
-                            prefixText: "\$ "),
-                        style: TextStyle(color: Colors.amber, fontSize: 25),
-                      ),
+                      buildTextField("Dolares", "\$ ", dolarController),
                       Divider(), // Espacamento
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: "Euros",
-                            labelStyle: TextStyle(color: Colors.amber),
-                            border: OutlineInputBorder(),
-                            prefixText: "\€ "),
-                        style: TextStyle(color: Colors.amber, fontSize: 25),
-                      ),
+                      buildTextField("Euros", "\€ ", euroController)
                     ],
                   ),
                 );
-              }
+              } // else
           } // switch
         }, // builder
       ),
@@ -115,7 +103,15 @@ class _HomeState extends State<Home> {
   }
 }
 
-Future<Map> getResponse() async {
-  http.Response response = await http.get(request_url);
-  return json.decode(response.body);
+Widget buildTextField(
+    String label, String prefix, TextEditingController txtController) {
+  return TextField(
+    controller: txtController,
+    decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.amber),
+        border: OutlineInputBorder(),
+        prefixText: prefix),
+    style: TextStyle(color: Colors.amber, fontSize: 25),
+  );
 }
