@@ -19,6 +19,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List _tarefasList = [];
+  Map<String, dynamic> _lastRemoved;
+  int _indexLastRemoved;
 
   final _tarefaController = TextEditingController();
 
@@ -111,6 +113,33 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        // removendo um item
+        setState(() {
+          _lastRemoved = Map.from(_tarefasList[index]);
+          _indexLastRemoved = index;
+          _tarefasList.removeAt(index);
+          _saveData();
+
+          // Desfazer a acao
+          final snack = SnackBar(
+            content: Text("Tarefa \"${_lastRemoved["title"]}\" removida!"),
+            action: SnackBarAction(
+              label: "Desfazer",
+              onPressed: () {
+                setState(() {
+                  _tarefasList.insert(_indexLastRemoved, _lastRemoved);
+                  _saveData();
+                });
+              },
+            ),
+            duration: Duration(seconds: 2),
+          );
+
+          // faz aparecer o snackbar
+          Scaffold.of(context).showSnackBar(snack);
+        });
+      },
     );
   }
 
