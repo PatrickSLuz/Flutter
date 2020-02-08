@@ -55,6 +55,12 @@ class _HomePageState extends State<HomePage> {
                   border: OutlineInputBorder()),
               style: TextStyle(color: Colors.white, fontSize: 18),
               textAlign: TextAlign.center,
+              // Function de clicar no "enter" do teclado
+              onSubmitted: (text) {
+                setState(() {
+                  _search = text;
+                });
+              },
             ),
           ),
           Expanded(
@@ -70,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.center,
                         child: CircularProgressIndicator(
                           valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.white),
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                           strokeWidth: 5,
                         ),
                       );
