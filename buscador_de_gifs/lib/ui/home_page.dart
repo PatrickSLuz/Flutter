@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'gif_page.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -118,6 +120,11 @@ class _HomePageState extends State<HomePage> {
                   snapshot.data["data"][index]["images"]["fixed_height"]["url"],
                   height: 300,
                   fit: BoxFit.cover),
+              onTap: () {
+                // Abrir a tela do GifPage
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (cotext) => GifPage(snapshot.data["data"][index])));
+              },
             );
           } else {
             // Se eh o ultimo item
