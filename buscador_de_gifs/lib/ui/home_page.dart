@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
           "https://api.giphy.com/v1/gifs/trending?api_key=0dDutamqP6UfZi7BQEpolxVnjq0K2iXn&limit=20&rating=G");
     } else {
       response = await http.get(
-          "https://api.giphy.com/v1/gifs/search?api_key=0dDutamqP6UfZi7BQEpolxVnjq0K2iXn&q=$_search&limit=20&offset=$_offset&rating=G&lang=en");
+          "https://api.giphy.com/v1/gifs/search?api_key=0dDutamqP6UfZi7BQEpolxVnjq0K2iXn&q=$_search&limit=19&offset=$_offset&rating=G&lang=en");
     }
     return json.decode(response.body);
   }
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
               onSubmitted: (text) {
                 setState(() {
                   _search = text;
+                  _offset = 0;
                 });
               },
             ),
@@ -93,19 +94,56 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int _getCount(List data) {
+    // Se nao estiver pesquisando
+    if (_search == null) {
+      return data.length;
+    } else {
+      // Para adicionar o Icone de "Exibir Mais Gifs"
+      return data.length + 1;
+    }
+  }
+
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     return GridView.builder(
         padding: EdgeInsets.all(2),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-        itemCount: snapshot.data["data"].length,
+        itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (contex, index) {
-          return GestureDetector(
-            child: Image.network(
-                snapshot.data["data"][index]["images"]["fixed_height"]["url"],
-                height: 300,
-                fit: BoxFit.cover),
-          );
+          // Se nao estiver pesquisando ou Se esta pesquisando e este nao eh o ultimo item
+          if (_search == null || index < snapshot.data["data"].length) {
+            return GestureDetector(
+              child: Image.network(
+                  snapshot.data["data"][index]["images"]["fixed_height"]["url"],
+                  height: 300,
+                  fit: BoxFit.cover),
+            );
+          } else {
+            // Se eh o ultimo item
+            // Retornar o Icone para Carregar mais Gifs
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.add, color: Colors.white, size: 70),
+                    Text(
+                      "Carregar Mais...",
+                      style: TextStyle(color: Colors.white, fontSize: 22),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
+                onTap: () {
+                  // Buscar mais 19 Gifs
+                  setState(() {
+                    _offset += 19;
+                  });
+                },
+              ),
+            );
+          }
         });
   }
 }
