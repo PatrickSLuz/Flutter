@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+// Nome da Tabela e das Colunas do Banco de Dados
 final String contactTable = "contactTable";
 final String idColumn = "idColumn";
 final String nameColumn = "nameColumn";
@@ -40,6 +41,72 @@ class ContactHelper {
       await db.execute(
           "CREAT TABLE $contactTable ($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT, $phoneColumn TEXT, $imgColumn TEXT);");
     });
+  }
+
+  // Gravar Contato
+  Future<Contact> saveContact(Contact contact) async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    contact.id = await dbContact.insert(contactTable, contact.toMap());
+    return contact;
+  }
+
+  // Buscar Contato
+  Future<Contact> getContact(int id) async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    List<Map> maps = await dbContact.query(contactTable,
+        columns: [idColumn, nameColumn, emailColumn, phoneColumn, imgColumn],
+        where: "$idColumn = ?",
+        whereArgs: [id]);
+    if (maps.length > 0) {
+      return Contact.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  // Deletar Contato
+  Future<int> deleteContact(int id) async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    return await dbContact
+        .delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
+  }
+
+  // Editar Contato
+  Future<int> updateContact(Contact contact) async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    return await dbContact.update(contactTable, contact.toMap(),
+        where: "$idColumn = ?", whereArgs: [contact.id]);
+  }
+
+  // Listar Todos Contatos
+  Future<List> getAllContact() async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
+    List<Contact> listContact = List();
+    for (Map item in listMap) {
+      listContact.add(Contact.fromMap(item));
+    }
+    return listContact;
+  }
+
+  // Quantidade de Contatos Cadastrados
+  getNumber() async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    return Sqflite.firstIntValue(
+        await dbContact.rawQuery("SELECT COUNT(*) FROM $contactTable"));
+  }
+
+  // Fechar conexao com o BD
+  Future close() async {
+    // Conexao com o BD
+    Database dbContact = await db;
+    dbContact.close();
   }
 }
 
