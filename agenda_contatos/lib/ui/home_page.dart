@@ -4,6 +4,8 @@ import 'package:agenda_contatos/helpers/contact_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'contact_page.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -17,11 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    helper.getAllContact().then((list) {
-      setState(() {
-        contacts = list;
-      });
-    });
+    _getAllContacts();
   }
 
   @override
@@ -33,7 +31,10 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          // Novo Contato
+          _showContactPage();
+        },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
       ),
@@ -81,6 +82,35 @@ class _HomePageState extends State<HomePage> {
               ],
             )),
       ),
+      onTap: () {
+        // Editar Contato
+        _showContactPage(contact: contacts[index]);
+      },
     );
+  }
+
+  void _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
+    // Se retornou algo da tela de Novo Contato
+    if (recContact != null) {
+      // Se foi enviado algo para a tela
+      if (contact != null) {
+        await helper.updateContact(recContact);
+      }else{
+        // Recebeu um Contato da outra tela, mas nao foi enviado. Ou seja, eh um contato novo
+        await helper.saveContact(recContact);
+      }
+      // Atualizar lista de contatos
+      _getAllContacts();
+    }
+  }
+
+  void _getAllContacts() {
+    helper.getAllContact().then((list) {
+      setState(() {
+        contacts = list;
+      });
+    });
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class ContactPage extends StatefulWidget {
   final Contact contact;
+
   ContactPage({this.contact});
 
   @override
