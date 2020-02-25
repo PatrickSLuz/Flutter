@@ -83,10 +83,68 @@ class _HomePageState extends State<HomePage> {
             )),
       ),
       onTap: () {
-        // Editar Contato
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
       },
     );
+  }
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomSheet(
+            onClosing: () {},
+            builder: (context) {
+              return Container(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlatButton(
+                          child: Text("Ligar",
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 20)),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlatButton(
+                          child: Text("Editar",
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 20)),
+                          onPressed: () {
+                            // Fechar a tela de opcoes
+                            Navigator.pop(context);
+                            // Editar Contato
+                            _showContactPage(contact: contacts[index]);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: FlatButton(
+                          child: Text("Excluir",
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 20)),
+                          onPressed: () {
+                            // Deletar Contato
+                            helper.deleteContact(contacts[index].id);
+                            setState(() {
+                              contacts.removeAt(index);
+                              // Fechar a tela de opcoes
+                              Navigator.pop(context);
+                            });
+                          },
+                        ),
+                      )
+                    ],
+                  ));
+            },
+          );
+        });
   }
 
   void _showContactPage({Contact contact}) async {
@@ -97,7 +155,7 @@ class _HomePageState extends State<HomePage> {
       // Se foi enviado algo para a tela
       if (contact != null) {
         await helper.updateContact(recContact);
-      }else{
+      } else {
         // Recebeu um Contato da outra tela, mas nao foi enviado. Ou seja, eh um contato novo
         await helper.saveContact(recContact);
       }
