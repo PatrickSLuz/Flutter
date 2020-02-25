@@ -75,11 +75,13 @@ class _ContactPageState extends State<ContactPage> {
                       image: DecorationImage(
                           image: _editedContact.img != null
                               ? FileImage(File(_editedContact.img))
-                              : AssetImage("images/default.png"))),
+                              : AssetImage("images/default.png"),
+                          fit: BoxFit.cover)),
                 ),
                 onTap: () {
                   //ImagePicker.pickImage(source: ImageSource.gallery)
-                  ImagePicker.pickImage(source: ImageSource.camera).then((file) {
+                  ImagePicker.pickImage(source: ImageSource.camera)
+                      .then((file) {
                     if (file == null) {
                       return;
                     } else {
@@ -126,34 +128,33 @@ class _ContactPageState extends State<ContactPage> {
     );
   }
 
-  Future<bool>_requestPop() {
+  Future<bool> _requestPop() {
     // Se editou algum campo
-    if (_userEdited){
-      showDialog(context: context,
-      builder: (context){
-        return AlertDialog(
-          title: Text("Descartar Alterações?"),
-          content: Text("Se sair as alterações serão perdidas."),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("Cancelar"),
-              onPressed: (){
-                // Fechar o Dialog
-                Navigator.pop(context);
-              }
-            ),
-            FlatButton(
-              child: Text("Sim"),
-                onPressed: (){
-                // Fechar o Dialog
-                Navigator.pop(context);
-                // Fechar a tela de Novo Contato
-                Navigator.pop(context);
-                }
-            ),
-          ],
-        );
-      });
+    if (_userEdited) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Descartar Alterações?"),
+              content: Text("Se sair as alterações serão perdidas."),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text("Cancelar"),
+                    onPressed: () {
+                      // Fechar o Dialog
+                      Navigator.pop(context);
+                    }),
+                FlatButton(
+                    child: Text("Sim"),
+                    onPressed: () {
+                      // Fechar o Dialog
+                      Navigator.pop(context);
+                      // Fechar a tela de Novo Contato
+                      Navigator.pop(context);
+                    }),
+              ],
+            );
+          });
       // Nao sair automaticamente
       return Future.value(false);
     } else {
