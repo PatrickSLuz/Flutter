@@ -1,10 +1,11 @@
+import 'package:chat_online/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   runApp(MyApp());
 
-  // Escrever no Firebase
+  /* Escrever no Firebase
   //Firestore.instance.collection("mensagens").document().setData({"msg": "Oi 4", "from":"alguem 4"});
 
   // Ler do Firebase
@@ -30,7 +31,7 @@ void main() async {
   Firestore.instance.collection("mensagens").document("nUskf1r8xKLPLYVMSc8U").snapshots().listen((dado) {
     // ira entrar aqui quando houver uma atualizacao em algum dado no Firestore deste document
       print(dado.data);
-  });
+  });*/
 
 }
 
@@ -40,9 +41,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Flutter Demo",
       theme: ThemeData(
-        primarySwatch: Colors.blue
+        primarySwatch: Colors.blue,
+        iconTheme: IconThemeData(color: Colors.blue)
       ),
-      home: Container(),
+      home: ChatScreen(),
     );
   }
 }
