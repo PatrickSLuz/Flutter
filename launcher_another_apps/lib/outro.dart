@@ -17,10 +17,14 @@ Widget buildLaucherOutro () {
       IconButton(
         icon: Icon(Icons.send),
         onPressed: () async {
-          var app_url = "pigbem://oi";
+          var browser_url = "https://www.pigbem.com";
+          var app_url = "pigbem://app";
 
           if (await canLaunch(app_url))
             await launch(app_url);
+
+//          else if (await canLaunch(browser_url))
+//            await launch(browser_url);
 
           else
             throw "Couldn't launch Outro";
