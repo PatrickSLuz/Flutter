@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:launcher_another_apps/browser.dart';
 import 'package:launcher_another_apps/facebook.dart';
+import 'package:launcher_another_apps/instagram.dart';
 import 'package:launcher_another_apps/maps.dart';
+import 'package:launcher_another_apps/outro.dart';
 import 'package:launcher_another_apps/phone.dart';
 import 'package:launcher_another_apps/whatsapp.dart';
 
@@ -49,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
             buildLauncherPhone(_phoneController),
             buildLaucherWhatsApp(_whatsController),
             buildLaucherFacebook(),
+            buildLaucherInstagram(),
+            buildLaucherOutro(),
             buildLauncherMaps()
           ],
         ),
