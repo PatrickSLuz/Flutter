@@ -12,7 +12,7 @@ class ProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Card(
-        child: type == "gird" ?
+        child: type == "grid" ?
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -38,6 +38,7 @@ class ProductTile extends StatelessWidget {
                     Text(
                       "R\$ ${product.price.toStringAsFixed(2)}",
                       style: TextStyle(
+                          color: Theme.of(context).primaryColor,
                           fontSize: 17,
                           fontWeight: FontWeight.bold
                       )
@@ -48,7 +49,43 @@ class ProductTile extends StatelessWidget {
             )
           ],
         )
-        : Row(),
+        : Row(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: Image.network(
+                product.images[0],
+                fit: BoxFit.cover,
+                height: 250,
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      product.title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
+                    Text(
+                        "R\$ ${product.price.toStringAsFixed(2)}",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold
+                        )
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
