@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual/screens/signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
+
+final _formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,16 +21,24 @@ class LoginScreen extends StatelessWidget {
             ),
             textColor: Colors.white,
             onPressed: () {
-
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => SignUpScreen()
+                )
+              );
             },
           )
         ],
       ),
       body: Form(
+        key: _formkey,
         child: ListView(
           padding: EdgeInsets.all(16),
           children: [
             TextFormField(
+              validator: (text) {
+                if(text.isEmpty || !text.contains("@")) return "E-mail inválido";
+              },
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 hintText: "E-mail"
@@ -34,6 +46,9 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             TextFormField(
+              validator: (text) {
+                if(text.isEmpty || text.length < 6) return "Senha inválida";
+              },
               obscureText: true,
               decoration: InputDecoration(
                 hintText: "Senha"
@@ -50,15 +65,23 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16),
-            RaisedButton(
-              child: Text(
-                "Entrar",
-                style: TextStyle(
-                  fontSize: 18
+            SizedBox(
+              height: 44,
+              child: RaisedButton(
+                child: Text(
+                  "Entrar",
+                  style: TextStyle(
+                    fontSize: 18
+                  ),
                 ),
+                textColor: Colors.white,
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  if(_formkey.currentState.validate()){
+                    
+                  }
+                },
               ),
-              textColor: Colors.white,
-              color: Theme.of(context).primaryColor,
             )
           ],
         ),
