@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_emailController.text.isEmpty) {
                         _scaffoldkey.currentState.showSnackBar(SnackBar(
                           content:
-                              Text("Insira se E-mail para recuperar a senha!"),
+                              Text("Insira seu E-mail para recuperar a senha!"),
                           backgroundColor: Colors.redAccent,
                           duration: Duration(seconds: 3),
                         ));
