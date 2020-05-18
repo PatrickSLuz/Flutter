@@ -26,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       body: ScopedModelDescendant<UserModel>(
         builder: (context, child, model) {
-          if(model.isLoading)
+          if (model.isLoading)
             return Center(child: CircularProgressIndicator());
 
           return Form(
@@ -55,7 +55,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   controller: _passController,
                   validator: (text) {
-                    if (text.isEmpty || text.length < 6) return "Senha inválida";
+                    if (text.isEmpty || text.length < 6)
+                      return "Senha inválida";
                   },
                   obscureText: true,
                   decoration: InputDecoration(hintText: "Senha"),
@@ -80,18 +81,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
                       if (_formkey.currentState.validate()) {
-
                         Map<String, dynamic> userData = {
-                          "name":_nameController.text,
-                          "email":_emailController.text,
-                          "address":_addressController.text
+                          "name": _nameController.text,
+                          "email": _emailController.text,
+                          "address": _addressController.text
                         };
                         model.singUp(
-                          userData: userData, 
-                          pass: _passController.text, 
-                          onSuccess: _onSuccess, 
-                          onFail: _onFail
-                        );
+                            userData: userData,
+                            pass: _passController.text,
+                            onSuccess: _onSuccess,
+                            onFail: _onFail);
                       }
                     },
                   ),
@@ -105,29 +104,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSuccess() {
-    _scaffoldkey.currentState.showSnackBar(
-      SnackBar(
-        content: Text("Usuario Criado com Sucesso!"),
-        backgroundColor: Theme.of(context).primaryColor,
-        duration: Duration(seconds: 3),
-      )
-    );
+    _scaffoldkey.currentState.showSnackBar(SnackBar(
+      content: Text("Usuario Criado com Sucesso!"),
+      backgroundColor: Theme.of(context).primaryColor,
+      duration: Duration(seconds: 3),
+    ));
     Future.delayed(Duration(seconds: 3)).then((value) {
       Navigator.of(context).pop();
     });
   }
 
   void _onFail() {
-    _scaffoldkey.currentState.showSnackBar(
-      SnackBar(
-        content: Text("Falha ao criar o Usuario!"),
-        backgroundColor: Colors.redAccent,
-        duration: Duration(seconds: 3),
-      )
-    );
+    _scaffoldkey.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao criar o Usuario!"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 3),
+    ));
     Future.delayed(Duration(seconds: 3)).then((value) {
       Navigator.of(context).pop();
     });
   }
-
 }
