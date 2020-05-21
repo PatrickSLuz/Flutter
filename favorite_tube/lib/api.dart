@@ -4,7 +4,6 @@ import 'package:favorite_tube/models/video.dart';
 import 'package:http/http.dart' as http;
 
 //https://www.googleapis.com/youtube/v3/search?part=snippet&q=$_search&type=video&key=$API_KEY&maxResults=10&pageToken=$_nextToken
-//http://suggestqueries.google.com/complete/search?hl=en&ds=yt&client=youtube&hjson=t&cp=1&q=$search&format=5&alt=json
 
 const API_KEY = "AIzaSyCUxoF7MY85jesS3RdPWGcwutnJGJRWfno";
 
