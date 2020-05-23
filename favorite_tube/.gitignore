@@ -1,5 +1,6 @@
 #Auto-generated
 env/
+*google-services.json
 
 # Miscellaneous
 *.class
