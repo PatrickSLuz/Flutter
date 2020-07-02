@@ -43,11 +43,10 @@ class VideoTile extends StatelessWidget {
                   )
                 ],
               )),
-              StreamBuilder<Map<String, Video>>(
+              StreamBuilder(
                   stream: BlocProvider.of<FavoriteBloc>(context).outFavorite,
                   initialData: {},
-                  builder:
-                      (context, AsyncSnapshot<Map<String, Video>> snapshot) {
+                  builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return IconButton(
                         icon: Icon(snapshot.data.containsKey(video.id)
