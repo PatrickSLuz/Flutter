@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:yaml/yaml.dart';
 
 class Api {
-  var apiKey;
+  static String apiKey;
 
   String _search;
   String _nextToken;
