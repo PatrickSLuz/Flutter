@@ -1,8 +1,9 @@
+import 'package:animations/home/view/home_screen.dart';
 import 'package:animations/login/widgets/form_container.dart';
 import 'package:animations/login/widgets/sign_up_button.dart';
 import 'package:animations/login/widgets/stagger_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
+//import 'package:flutter/scheduler.dart' show timeDilation;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -20,6 +21,14 @@ class _LoginScreenState extends State<LoginScreen>
       vsync: this,
       duration: Duration(seconds: 2),
     );
+
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => HomeScreen(),
+        ));
+      }
+    });
   }
 
   @override
