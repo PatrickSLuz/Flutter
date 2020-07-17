@@ -1,5 +1,8 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:gerenciar_loja_virtual/orders/bloc/orders_bloc.dart';
+import 'package:gerenciar_loja_virtual/orders/view/orders_screen.dart';
 import 'package:gerenciar_loja_virtual/users/bloc/user_bloc.dart';
 import 'package:gerenciar_loja_virtual/users/view/users_screen.dart';
 
@@ -13,12 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   int page = 0;
 
   UserBloc _userBloc;
+  OrdersBloc _ordersBloc;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _userBloc = UserBloc();
+    _ordersBloc = OrdersBloc();
   }
 
   @override
@@ -66,24 +71,67 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      floatingActionButton: _buildFAB(),
       body: SafeArea(
         child: BlocProvider<UserBloc>(
           bloc: _userBloc,
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (value) {
-              setState(() {
-                page = value;
-              });
-            },
-            children: <Widget>[
-              UsersScreen(),
-              Container(color: Colors.red),
-              Container(color: Colors.green),
-            ],
+          child: BlocProvider<OrdersBloc>(
+            bloc: _ordersBloc,
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (value) {
+                setState(() {
+                  page = value;
+                });
+              },
+              children: <Widget>[
+                UsersScreen(),
+                OrdersScreen(),
+                Container(color: Colors.green),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildFAB() {
+    if (page == 1) {
+      return SpeedDial(
+        child: Icon(Icons.sort),
+        backgroundColor: Colors.pinkAccent,
+        overlayOpacity: 0.4,
+        overlayColor: Colors.black,
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.arrow_downward,
+              color: Colors.pinkAccent,
+            ),
+            backgroundColor: Colors.white,
+            label: "Concluidos abaixo",
+            labelStyle: TextStyle(fontSize: 14),
+            onTap: () {
+              _ordersBloc.setSortType(SortType.LAST);
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.arrow_upward,
+              color: Colors.pinkAccent,
+            ),
+            backgroundColor: Colors.white,
+            label: "Concluidos acima",
+            labelStyle: TextStyle(fontSize: 14),
+            onTap: () {
+              _ordersBloc.setSortType(SortType.FIRST);
+            },
+          ),
+        ],
+      );
+    } else {
+      return null;
+    }
   }
 }
