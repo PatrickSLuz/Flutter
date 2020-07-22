@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gerenciar_loja_virtual/orders/bloc/orders_bloc.dart';
 import 'package:gerenciar_loja_virtual/orders/view/orders_screen.dart';
+import 'package:gerenciar_loja_virtual/products/view/products_screen.dart';
 import 'package:gerenciar_loja_virtual/users/bloc/user_bloc.dart';
 import 'package:gerenciar_loja_virtual/users/view/users_screen.dart';
 
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: <Widget>[
                 UsersScreen(),
                 OrdersScreen(),
-                Container(color: Colors.green),
+                ProductsScreen(),
               ],
             ),
           ),
