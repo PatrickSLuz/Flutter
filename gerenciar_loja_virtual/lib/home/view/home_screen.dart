@@ -4,6 +4,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gerenciar_loja_virtual/orders/bloc/orders_bloc.dart';
 import 'package:gerenciar_loja_virtual/orders/view/orders_screen.dart';
 import 'package:gerenciar_loja_virtual/products/view/products_screen.dart';
+import 'package:gerenciar_loja_virtual/products/widgets/edit_category_dialog.dart';
 import 'package:gerenciar_loja_virtual/users/bloc/user_bloc.dart';
 import 'package:gerenciar_loja_virtual/users/view/users_screen.dart';
 
@@ -130,6 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
+      );
+    } else if (page == 2) {
+      return FloatingActionButton(
+        backgroundColor: Colors.pinkAccent,
+        child: Icon(Icons.add),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => EditCategoryDialog(),
+          );
+        },
       );
     } else {
       return null;

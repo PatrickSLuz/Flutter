@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenciar_loja_virtual/products/view/product_edit_screen.dart';
+import 'package:gerenciar_loja_virtual/products/widgets/edit_category_dialog.dart';
 
 class CategoryTile extends StatelessWidget {
   final DocumentSnapshot category;
@@ -18,9 +19,17 @@ class CategoryTile extends StatelessWidget {
             style:
                 TextStyle(color: Colors.grey[850], fontWeight: FontWeight.w500),
           ),
-          leading: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            backgroundImage: NetworkImage(category.data['icon']),
+          leading: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => EditCategoryDialog(category: category),
+              );
+            },
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              backgroundImage: NetworkImage(category.data['icon']),
+            ),
           ),
           children: <Widget>[
             FutureBuilder(

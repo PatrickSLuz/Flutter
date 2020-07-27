@@ -13,8 +13,8 @@ class _ProductsScreenState extends State<ProductsScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    return FutureBuilder(
-      future: Firestore.instance.collection("products").getDocuments(),
+    return StreamBuilder(
+      stream: Firestore.instance.collection("products").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
